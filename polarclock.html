@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	
+<head>
+ <meta charset="utf-8" />
+	
+	<title>Toby Ward - Polar Clock</title>
+	
+	<link href='http://fonts.googleapis.com/css?family=Arvo|Allan:700' rel='stylesheet' type='text/css' />
+	
+	<link href="css/default.css" rel="stylesheet" type="text/css" />
+
+ <script src="raphael-min.js"></script>
+        <script>
+            window.onload = function () {
+                var r = Raphael("holder", 550, 550),
+                    R = 200,
+                    init = true,
+                    param = {stroke: "#fff", "stroke-width": 30},
+                    hash = document.location.hash,
+                    marksAttr = {fill: hash || "#444", stroke: "none"},
+                    html = [
+                        document.getElementById("h"),
+                        document.getElementById("m"),
+                        document.getElementById("s"),
+                        document.getElementById("d"),
+                        document.getElementById("mnth"),
+                        document.getElementById("ampm")
+                    ];
+                // Custom Attribute
+                r.customAttributes.arc = function (value, total, R) {
+                    var alpha = 360 / total * value,
+                        a = (90 - alpha) * Math.PI / 180,
+                        x = 300 + R * Math.cos(a),
+                        y = 300 - R * Math.sin(a),
+                        color = "hsb(".concat(Math.round(R) / 200, ",", value / total, ", .75)"),
+                        path;
+                    if (total == value) {
+                        path = [["M", 300, 300 - R], ["A", R, R, 0, 1, 1, 299.99, 300 - R]];
+                    } else {
+                        path = [["M", 300, 300 - R], ["A", R, R, 0, +(alpha > 180), 1, x, y]];
+                    }
+                    return {path: path, stroke: color};
+                };
+
+                drawMarks(R, 60);
+                var sec = r.path().attr(param).attr({arc: [0, 60, R]});
+                R -= 40;
+                drawMarks(R, 60);
+                var min = r.path().attr(param).attr({arc: [0, 60, R]});
+                R -= 40;
+                drawMarks(R, 12);
+                var hor = r.path().attr(param).attr({arc: [0, 12, R]});
+                R -= 40;
+                drawMarks(R, 31);
+                var day = r.path().attr(param).attr({arc: [0, 31, R]});
+                R -= 40;
+                drawMarks(R, 12);
+                var mon = r.path().attr(param).attr({arc: [0, 12, R]});
+                var pm = r.circle(300, 300, 16).attr({stroke: "none", fill: Raphael.hsb2rgb(15 / 200, 1, .75).hex});
+                html[5].style.color = Raphael.hsb2rgb(15 / 200, 1, .75).hex;
+
+                function updateVal(value, total, R, hand, id) {
+                    if (total == 31) { // month
+                        var d = new Date;
+                        d.setDate(1);
+                        d.setMonth(d.getMonth() + 1);
+                        d.setDate(-1);
+                        total = d.getDate();
+                    }
+                    var color = "hsb(".concat(Math.round(R) / 200, ",", value / total, ", .75)");
+                    if (init) {
+                        hand.animate({arc: [value, total, R]}, 900, ">");
+                    } else {
+                        if (!value || value == total) {
+                            value = total;
+                            hand.animate({arc: [value, total, R]}, 750, "bounce", function () {
+                                hand.attr({arc: [0, total, R]});
+                            });
+                        } else {
+                            hand.animate({arc: [value, total, R]}, 750, "elastic");
+                        }
+                    }
+                    html[id].innerHTML = (value < 10 ? "0" : "") + value;
+                    html[id].style.color = Raphael.getRGB(color).hex;
+                }
+
+                function drawMarks(R, total) {
+                    if (total == 31) { // month
+                        var d = new Date;
+                        d.setDate(1);
+                        d.setMonth(d.getMonth() + 1);
+                        d.setDate(-1);
+                        total = d.getDate();
+                    }
+                    var color = "hsb(".concat(Math.round(R) / 200, ", 1, .75)"),
+                        out = r.set();
+                    for (var value = 0; value < total; value++) {
+                        var alpha = 360 / total * value,
+                            a = (90 - alpha) * Math.PI / 180,
+                            x = 300 + R * Math.cos(a),
+                            y = 300 - R * Math.sin(a);
+                        out.push(r.circle(x, y, 2).attr(marksAttr));
+                    }
+                    return out;
+                }
+
+                (function () {
+                    var d = new Date,
+                        am = (d.getHours() < 12),
+                        h = d.getHours() % 12 || 12;
+                    updateVal(d.getSeconds(), 60, 200, sec, 2);
+                    updateVal(d.getMinutes(), 60, 160, min, 1);
+                    updateVal(h, 12, 120, hor, 0);
+                    updateVal(d.getDate(), 31, 80, day, 3);
+                    updateVal(d.getMonth() + 1, 12, 40, mon, 4);
+                    pm[(am ? "hide" : "show")]();
+                    html[5].innerHTML = am ? "AM" : "PM";
+                    setTimeout(arguments.callee, 1000);
+                    init = false;
+                })();
+            };
+        </script>
+
+        <style media="screen">
+            #holder {
+                height: 550px;
+                margin: -50px 0 0 330px;
+                width: 600px;
+            }
+            #time {
+                text-align: center;
+                font: 100 3em "Helvetica Neue", Helvetica, Arial, sans-serif;
+                color: rgb(255, 255, 255);
+            }
+
+        html {
+	background-color: #333;
+}
+
+        h1 {
+	color: #FFF;
+}
+
+        #copy {
+	color: #FFF;
+}
+        </style>
+
+	
+</head>
+
+
+	<body>
+	
+
+	<div id="wrapper">
+	
+		<div id="headerRow">
+		
+		<div class="container">
+		
+			<a href="index.html"><img src="img/logo.png" alt="Computer Science Year 1" class="logo" /></a>
+		
+			<ul>
+					
+	<li><a href="index.html">Home</a></li>
+			
+			<li><a href="cv.html">CV</a></li>
+	
+					<li><a href="greetings.html">Greetings</a></li>
+		
+				<li><a href="polarclock.html" class="on">My Polar Clock</a></li>
+                        <li><a href="mailto:toby@tobymward.com?Subject=Website Contact" target="_top">Contact Me</a>
+                        </li>
+	
+				</ul>
+		
+		</div>
+		
+	</div>
+		
+	<div id="contentRow">
+	
+<br>
+
+ <div id="holder"></div>
+        <div id="time">
+           <span id="h"></span>:</><span id="m"></span>:<span id="s"></span> <span id="ampm"></span>  <br>  <span id="d"></span>/<span id="mnth"></span>/<span id="year" style="color: rgb(34, 82, 130);">2016</span>
+<br>
+<br>
+        </div>		
+		
+<div id="footerRow">
+	
+			<div id="container">
+	
+				<div id="footerContentRow">
+		
+<br>				
+	<h1>My Polar Clock</h1>
+			
+		<hr size="1" color="#3C3C3C" width="100%">
+
+					<br>
+			
+		<p>I developed this polar clock whilst playing around with the capabilites of the Raphael javascript library.
+<br>
+ I liked the end product so much that I decided I had to include it in the site!
+</p>
+				
+</div>
+			
+		<div id="footerCreditRow" align="center">
+	
+Made by Toby Ward - <a href="mailto:toby@tobymward.com?Subject=Website Contact" target="_top">Contact Me</a>
+
+	<br>
+				
+	<br>
+				
+	<a href="index.html">Home</a>					
+	</div>
+			
+	</div>
+		
+	</div>
+ 
+</body> 
+
+
+</html>
