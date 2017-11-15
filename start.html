@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<title>Toby's Start Page</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/startpage2.css" type="text/css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+body,h1 {font-family: "Raleway", sans-serif}
+body, html {height: 100%}
+.bgimg {
+    background-image: url("./img/forestbridge.jpg");
+    min-height: 100%;
+    background-position: center;
+    background-size: cover;
+}
+</style>
+<body onload="checkTime()">
+<div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+   <div id="date" class="w3-display-topleft w3-padding-large w3-xlarge">
+    
+  </div>
+  <div class="w3-display-middle">
+    <h1 class="w3-jumbo w3-animate-top">Hello Toby</h1>
+      <hr class="w3-border-grey" style="margin:auto;width:40%">
+       <p id="time" class="w3-xxlarge w3-center">
+          <script>
+
+          function checkTime(i) {
+            if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+             return i;
+          }
+
+          function GetDateTime() {
+              n =  new Date();
+              y = n.getFullYear();
+              m = n.getMonth() + 1;
+              d = n.getDate();
+              document.getElementById("date").innerHTML = d + " . " + m + " . " + y;
+              var today = new Date();
+              var h = today.getHours();
+              var m = today.getMinutes();
+              var s = today.getSeconds();
+              m = checkTime(m);
+              s = checkTime(s);
+              document.getElementById("time").innerHTML =
+              h + " : " + m + " : " + s;
+              setTimeout(GetDateTime, 1000);
+            }
+
+            GetDateTime();
+
+            </script>
+        </p>
+      </p>
+  </div>
+
+  <div class="w3-display-bottomleft w3-padding-large">
+    <!--Powered by <a href="http://www.tobyward.me" target="_blank">Toby Ward</a>-->
+  </div>
+</div>
+
+</body>
+</html>
