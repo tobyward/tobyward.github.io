@@ -24,4 +24,6 @@ function updateClock() {
 
 	// Fill '#clock' div with time
 	$("#clock").html(currentTimeString);
+
+	setInterval('updateClock()', 1000);
 }
