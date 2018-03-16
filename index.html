@@ -1,53 +1,64 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>Toby Ward - Homepage</title>
-		<link href='http://fonts.googleapis.com/css?family=Arvo|Allan:700' rel='stylesheet' type='text/css' />
-		<link href="css/default.css" rel="stylesheet" type="text/css" />
-		<script src="js/main.js"></script>
-	</head>
-	<body>
-	<div id="fb-root"></div>
-		<div id="wrapper">
-			<div id="headerRow">
-				<div class="container">
-					<div class="container1">
-					<a href="index.html"><img src="img/tw_logo.png" alt="Toby Ward - 23 Years Old" class="logo" /></a>
-					<div class="verticalline"></div>
-					<ul>
-						<li><a href="index.html" class="on">Home</a></li>
-						<li><a href="cv.html">CV</a></li>
-						<li><a href="greetings.html">Greetings</a></li>
-						<li><a href="polarclock.html">My Polar Clock</a>
-						<li><a href="mailto:toby@tobyward.me?Subject=Website Contact" target="_top">Contact Me</a>
-						</li>
-					</ul>
-				</div>
-				</div>
-			</div>
-			<div id="contentRow">
-				<div class="container" align="center">
-				<image src="img/author_generic.jpg" alt="Toby Ward"/>
-				<br>
-				<br>
-					<h1>Toby Ward - <span>23 years old</span></h1>
-				</div>
-			</div>
-			<div id="footerRow">
-				<div class="container">
-					<div id="footerContentRow">
-					<br>
-					<h1>About Me and My Site</h1>
-					<hr size="1" color="#3C3C3C" width="100%">
-					<br>
-					<p>Hello. My name is Toby Ward. I designed this site in my spare time and actively maintain it as a hobby.				</p>
-				</div>
-					<div id="footerCreditRow" align="center">
-					<br>
-					Made by Toby Ward - <a href="mailto:toby@tobyward.me?Subject=Website Contact" target="_top">Contact Me</a>
-					</div>
-				</div>
-			</div>
-	</body>
+<title>Toby's Start Page</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/startpage2.css" type="text/css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+body,h1 {font-family: "Raleway", sans-serif}
+body, html {height: 100%}
+.bgimg {
+    background-image: url("./img/forestbridge.jpg");
+    min-height: 100%;
+    background-position: center;
+    background-size: cover;
+}
+</style>
+<body onload="checkTime()">
+<div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+   <div id="date" class="w3-display-topleft w3-padding-large w3-xlarge">
+    
+  </div>
+  <div class="w3-display-middle">
+    <h1 class="w3-jumbo w3-animate-top">Hello Toby</h1>
+      <hr class="w3-border-grey" style="margin:auto;width:40%">
+       <p id="time" class="w3-xxlarge w3-center">
+          <script>
+
+          function checkTime(i) {
+            if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+             return i;
+          }
+
+          function GetDateTime() {
+              n =  new Date();
+              y = n.getFullYear();
+              m = n.getMonth() + 1;
+              d = n.getDate();
+              document.getElementById("date").innerHTML = d + " . " + m + " . " + y;
+              var today = new Date();
+              var h = today.getHours();
+              var m = today.getMinutes();
+              var s = today.getSeconds();
+              m = checkTime(m);
+              s = checkTime(s);
+              document.getElementById("time").innerHTML =
+              h + " : " + m + " : " + s;
+              setTimeout(GetDateTime, 1000);
+            }
+
+            GetDateTime();
+
+            </script>
+        </p>
+      </p>
+  </div>
+
+  <div class="w3-display-bottomleft w3-padding-large">
+    <!--Powered by <a href="http://www.tobyward.me" target="_blank">Toby Ward</a>-->
+  </div>
+</div>
+
+</body>
 </html>
